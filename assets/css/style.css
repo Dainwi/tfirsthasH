@@ -1,0 +1,98 @@
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:opsz&family=Roboto&display=swap");
+
+* {
+  font-family: "Roboto", sans-serif;
+}
+
+.btn {
+  background-color: #6747c7 !important;
+  color: #fff !important;
+}
+
+.container-fluid {
+  width: 1110px;
+  background-color: #f4f5ff;
+}
+
+h1 {
+  color: #2f1c6a !important;
+  font-family: "DM Sans", sans-serif;
+}
+
+.price {
+  font-family: "DM Sans", sans-serif;
+  font-weight: 700px !important;
+}
+
+ul > li {
+  font-size: 17px !important;
+}
+
+.card {
+  text-align: center;
+  border: none;
+}
+
+.price-m {
+  display: none;
+}
+
+.plan-renew-d {
+  font-size: 14px;
+}
+
+.card-footer {
+  color: #2f1c6a;
+}
+
+.card-active {
+  border: 2px solid #00b090 !important;
+}
+
+.footer-active {
+  background-color: #00b090 !important;
+  color: #fff !important;
+}
+
+.info {
+  padding-left: 30px !important;
+}
+
+.period {
+  padding-top: 30px;
+  padding-bottom: 20px;
+}
+
+.hidden {
+  display: none;
+}
+
+.cursor-pointer{
+  cursor: pointer;
+}
+
+@media screen and (max-width: 768px) {
+  .info {
+    padding-left: 20px !important;
+  }
+  .period {
+    padding-top: 0px;
+    padding-bottom: 0px;
+  }
+  .card {
+    width: 100%;
+    margin-top: 20px;
+    text-align: left;
+  }
+
+  .price {
+    display: none;
+  }
+  .price-m {
+    display: block;
+  }
+
+  .currency {
+    display: none;
+  }
+}
