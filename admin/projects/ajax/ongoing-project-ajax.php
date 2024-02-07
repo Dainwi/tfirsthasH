@@ -3,7 +3,7 @@ include_once('../../../config.php');
 
 session_start();
 
-$cusID=$_SESSION['user_id'];
+$cusID = $_SESSION['user_id'];
 
 if (isset($_POST['assignM'])) {
     $projectId = $_POST['prid'];
@@ -324,7 +324,7 @@ if (isset($_POST['assignreq'])) {
     $evntid = mysqli_real_escape_string($con, $_POST['evntid']);
     $evntdate = mysqli_real_escape_string($con, $_POST['evntdate']);
     $emptype = mysqli_real_escape_string($con, $_POST['emptype']);
-    
+
 
     $date = date('Y-m-d', strtotime($evntdate)); // Format the date correctly
     $response = "";
@@ -390,6 +390,7 @@ if (isset($_POST['req-submit'])) {
 
 
         $datee = date_create($evntdate);
+        $formattedDate = $datee->format('Y-m-d');
 
 
         $sql = "DELETE FROM assign_requirements WHERE ar_requirement_id={$erid}";
@@ -401,7 +402,8 @@ if (isset($_POST['req-submit'])) {
                 foreach ($assignto as $index => $item_id) {
                     $assigntos = $item_id;
 
-                    $sql1 = "INSERT INTO assign_requirements(ar_requirement_id,ar_event_id,ar_date,ar_assign_to,ar_project_id)VALUES($erid,$eventid,'$evntdate',$assigntos,$prid)";
+                    // $sql1 = "INSERT INTO assign_requirements(ar_requirement_id,ar_event_id,ar_date,ar_assign_to,ar_project_id)VALUES($erid,$eventid,'$evntdate',$assigntos,$prid)";
+                    $sql1 = "INSERT INTO assign_requirements(ar_requirement_id,ar_event_id,ar_date,ar_assign_to,ar_project_id)VALUES($erid,$eventid,'$formattedDate',$assigntos,$prid)";
                     $res1 = mysqli_query($con, $sql1);
                 }
 
