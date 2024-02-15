@@ -27,7 +27,7 @@ $offset = ($page - 1) * $limit;
     <div class="card card-bg rounded">
         <div class="card-body">
             <?php if ($paymentType == 0) {
-                $sql3 = "SELECT * FROM salary_details WHERE sd_user_id={$employee_id} ORDER BY sd_month DESC LIMIT {$offset},{$limit}";
+                $sql3 = "SELECT * FROM salary_details JOIN users_db ON salary_details.sd_user_id= users_db.u_id WHERE sd_user_id={$employee_id} ORDER BY sd_month DESC LIMIT {$offset},{$limit}";
                 $res3 = mysqli_query($con, $sql3);
                 if (mysqli_num_rows($res3) > 0) {
                     $ii = $offset + 1; ?>
@@ -39,6 +39,7 @@ $offset = ($page - 1) * $limit;
                                     <th scope="col" class="text-warning">#</th>
                                     <th scope="col" class="text-warning">Paid Month</th>
                                     <th scope="col" class="text-warning">Paid On</th>
+                                    <th scope="col" class="text-warning">Payment Amount</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -54,6 +55,7 @@ $offset = ($page - 1) * $limit;
                                             ?>
                                         </td>
                                         <td class="text-light"><?php echo $row3['sd_paid_on']; ?></td>
+                                        <td class="text-light"><?php echo $row3['payment_amount']; ?></td>
 
                                     </tr>
                                 <?php $ii++;

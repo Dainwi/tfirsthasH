@@ -32,11 +32,20 @@ if (isset($_POST['submit'])) {
       $alertMessage = '<div class="alert alert-success" role="alert">Registration successful</div>';
 
       // Insert new user if not exists
-      $sql = "INSERT INTO admin(c_name, c_email, c_phone, password) VALUES ('$name', '$email', '$phone', '$password_hashed')";
-      $result = mysqli_query($con, $sql);
+   $sql = "INSERT INTO admin(c_name, c_email, c_phone, password) VALUES ('$name', '$email', '$phone', '$password_hashed')";
+$result = mysqli_query($con, $sql);
+
+
+
+
+
+
 
       if ($result) {
         $userid = mysqli_insert_id($con);
+        // Correctly use the last inserted ID in the next query
+        $sqlcomp = "INSERT INTO companies(cus_id) VALUES($userid)";
+        $resultcomp = mysqli_query($con, $sqlcomp);
         session_start();
         $_SESSION['user_id'] = $userid;
         $_SESSION['user_name'] = $name;

@@ -379,49 +379,58 @@ if (isset($_POST['assignreq'])) {
 if (isset($_POST['req-submit'])) {
     // echo "<pre>";
     // echo print_r($_POST);
-    $output = "";
+   
     if (isset($_POST['erid'])) {
 
-
+        $output = "";
         $erid = $_POST['erid'];
         $prid = $_POST['project_id'];
         $eventid = $_POST['eventid'];
         $evntdate = $_POST['evntdate'];
+        
+        
+        // echo $evntdate;
 
 
-        $datee = date_create($evntdate);
+       $datee = date_create($evntdate);
+$formattedDate = $datee->format('Y-m-d'); // Format the date as YYYY-MM-DD
+
 
 
         $sql = "DELETE FROM assign_requirements WHERE ar_requirement_id={$erid}";
         $res = mysqli_query($con, $sql);
 
         if ($res) {
-            if (isset($_POST['assignto'])) {
-                $assignto = $_POST['assignto'];
-                foreach ($assignto as $index => $item_id) {
-                    $assigntos = $item_id;
+    if (isset($_POST['assignto'])) {
+        $assignto = $_POST['assignto'];
+        foreach ($assignto as $index => $item_id) {
+            $assigntos = mysqli_real_escape_string($con, $item_id);
+            $eridSafe = mysqli_real_escape_string($con, $erid);
+            $eventidSafe = mysqli_real_escape_string($con, $eventid);
+            $evntdateSafe = mysqli_real_escape_string($con, $evntdate);
+            $pridSafe = mysqli_real_escape_string($con, $prid);
 
-                    $sql1 = "INSERT INTO assign_requirements(ar_requirement_id,ar_event_id,ar_date,ar_assign_to,ar_project_id)VALUES($erid,$eventid,'$evntdate',$assigntos,$prid)";
-                    $res1 = mysqli_query($con, $sql1);
-                }
+           $sql1 = "INSERT INTO assign_requirements(ar_requirement_id,ar_event_id,ar_date,ar_assign_to,ar_project_id)VALUES($erid,$eventid,'$formattedDate',$assigntos,$prid)";
+            $res1 = mysqli_query($con, $sql1);
+        }
 
-                $sql3 = "SELECT * FROM assign_requirements LEFT JOIN users_db ON users_db.u_id = assign_requirements.ar_assign_to  WHERE ar_requirement_id={$erid} AND users_db.user_active=1";
-                $res3 = mysqli_query($con, $sql3);
+        if ($res1) {
+            $sql3 = "SELECT * FROM assign_requirements LEFT JOIN users_db ON users_db.u_id = assign_requirements.ar_assign_to WHERE ar_requirement_id=$eridSafe AND users_db.user_active=1";
+            $res3 = mysqli_query($con, $sql3);
 
-                if (mysqli_num_rows($res3) > 0) {
-
-                    while ($row3 = mysqli_fetch_assoc($res3)) {
-
-                        $output .= "<li class='me-4'>{$row3["user_name"]}</li>";
-                    }
-                } else {
-
-                    $output .= "<small>Team not assign</small>";
+            if (mysqli_num_rows($res3) > 0) {
+                while ($row3 = mysqli_fetch_assoc($res3)) {
+                    $output .= "<li class='me-4'>" . htmlspecialchars($row3["user_name"]) . "</li>"; // Use htmlspecialchars to avoid XSS
                 }
             } else {
-                $output .= "<small>Team not assign</small>";
+                $output .= "<small>Team not assigned</small>";
             }
         }
+    } else {
+        $output .= "<small>Team not assigned</small>";
+    }
+}
+
     } else {
         echo "<small>Team not assign</small>";
     }

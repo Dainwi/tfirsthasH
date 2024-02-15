@@ -167,7 +167,7 @@ if (mysqli_num_rows($res_profile) > 0) {
 
         </div>
     </div>
-    <!-- <div class="card card-bg rounded">
+     <div class="card card-bg rounded">
         <div class="card-header">
             <h4 class="card-title text-warning">Change Password</h4>
         </div>
@@ -213,7 +213,7 @@ if (mysqli_num_rows($res_profile) > 0) {
                 ?>
             </form>
         </div>
-    </div> -->
+    </div> 
 
 </div>
 <!-- modal  -->

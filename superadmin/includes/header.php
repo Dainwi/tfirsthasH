@@ -1,3 +1,18 @@
+<?php
+include_once("../config.php");
+if (!isset($_SESSION)) {
+    session_start();
+
+
+    if (!isset($_SESSION["login_superadmin"])) {
+        header("Location: $url");
+    }
+
+    
+
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 

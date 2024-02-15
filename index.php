@@ -115,7 +115,7 @@ if (isset($_SESSION["login_admin"])) {
 
               </form>
               <div class="authent-reg pt-3">
-                <a href="#"> Forgot Password? </a>
+                <a href="forgot_password_form.php"> Forgot Password? </a>
                 <p class="pt-3">
                   Not a Member yet?
                   <br/>

@@ -3,7 +3,7 @@
 include 'includes/header.php';
 // session_start();
 ?>
-<?php echo $_SESSION['user_id']; ?>
+<!--<?php echo $_SESSION['user_id']; ?>-->
 
 <div class="container-fluid">
   <div class="container">
@@ -271,6 +271,8 @@ include 'includes/header.php';
         e.preventDefault();
         $("#couponInput").removeClass("hidden");
       });
+      
+      var couponname = 'Coupon -';
 
       $("#couponSub").click(function (e) {
         e.preventDefault();
@@ -287,6 +289,7 @@ include 'includes/header.php';
           success: function (response) {
             // Parse the response as JSON
             var responseData = JSON.parse(response);
+            couponname += couponE;
 
             // Check the numeric response code
             switch (responseData.code) {
@@ -332,47 +335,76 @@ include 'includes/header.php';
         });
       });
 
-      $("#payButton").click(function () {
-        var payableAmount = parseFloat($("#payable").text()); // Get the updated payable amount 
+     $("#payButton").click(function () {
+    var payableAmount = parseFloat($("#payable").text()); // Get the updated payable amount
 
-
-        var options = {
-          key: '<?php echo $rkey ?>', // Replace with your actual key
-          amount: payableAmount * 100, // Amount in paise
-          currency: 'INR',
-          name: '<?php echo $rname ?>',
-          handler: function (response) {
-            // ... Other variables ...
-
-            // You can use the variables here in your AJAX request
-            $.ajax({
-              type: "POST",
-              url: "payment.php",
-              data: {
+    // Check if payable amount is zero
+    if (payableAmount === 0) {
+        // Directly make an AJAX call to payment.php
+        $.ajax({
+            type: "POST",
+            url: "payment.php",
+            data: {
                 paymentStatus: true,
-                payment_id: response.razorpay_payment_id,
+                payment_id: couponname, // No payment id as no payment was processed
                 payableAmount: payableAmount,
                 planId: planId,
                 planDuration: planDuration,
                 couId: couId,
                 userId: userId,
-              },
-              success: function (response) {
-                // window.location.href = 'https://tfirsthash.triplehash.in/admin';
-                window.location.href = urL;
+            },
+            success: function (response) {
+                // Redirecting to the admin page
+                window.location.href = 'https://tfirsthash.triplehash.in/admin';
+                // Assuming this line is meant to be on the server side and not here:
                 $_SESSION['login_admin'] = true;
-                console.log("Payment success");
-              },
-              error: function (xhr, status, error) {
-                console.error("AJAX request to payment.php failed:",error);
-              }
-            });
-          },
-          // ... Rest of your Razorpay options ...
+                console.log("User created successfully without payment");
+            },
+            error: function (xhr, status, error) {
+                console.error("AJAX request to payment.php failed:", error);
+            }
+        });
+    } else {
+        // Proceed with Razorpay payment process
+        var options = {
+            key: '<?php echo $rkey ?>', // Replace with your actual key
+            amount: payableAmount * 100, // Amount in paise
+            currency: 'INR',
+            name: '<?php echo $rname ?>',
+            handler: function (response) {
+                // ... Other variables ...
+
+                // AJAX request with payment details
+                $.ajax({
+                    type: "POST",
+                    url: "payment.php",
+                    data: {
+                        paymentStatus: true,
+                        payment_id: response.razorpay_payment_id,
+                        payableAmount: payableAmount,
+                        planId: planId,
+                        planDuration: planDuration,
+                        couId: couId,
+                        userId: userId,
+                    },
+                    success: function (response) {
+                        window.location.href = 'https://tfirsthash.triplehash.in/admin';
+                        $_SESSION['login_admin'] = true;
+                        // Server-side code, not for client-side
+                        console.log("Payment success");
+                    },
+                    error: function (xhr, status, error) {
+                        console.error("AJAX request to payment.php failed:", error);
+                    }
+                });
+            },
+            // ... Rest of your Razorpay options ...
         };
         var rzp = new Razorpay(options);
         rzp.open();
-      });
+    }
+});
+
     });
   </script>
 

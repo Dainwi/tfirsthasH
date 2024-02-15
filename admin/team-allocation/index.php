@@ -227,6 +227,8 @@ include_once('../include/top-nav.php');
         var evntdate = $(this).closest('td').find('input[name="evntdate"]').val();
         var emptype = $(this).closest('td').find('input[name="emptype"]').val();
         var classnm = ".cdiv" + rid;
+        
+        console.log(evntdate);
 
         $("#name-classs").val(classnm);
         $("#project-idd").val(projid);

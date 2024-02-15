@@ -6,6 +6,7 @@ include_once('../include/header.php');
 include_once('../include/sidebar.php');
 include_once('../include/top-nav.php');
 $userID = $_SESSION['user_id'];
+
 ?>
 
 <div class="container">
@@ -72,7 +73,7 @@ $userID = $_SESSION['user_id'];
                             </div>
 
                             <div class="col-md-6 form-group mb-2">
-                                <input name="phone" value="" required type="number" class="form-control" id="phone" placeholder="Mobile No.">
+                                <input name="phone" value="" required type="tel" class="form-control" id="phone" placeholder="Mobile No.">
                             </div>
 
 

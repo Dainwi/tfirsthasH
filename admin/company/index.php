@@ -7,6 +7,7 @@ define('PAGE_T', 'Company Profile');
 include_once('../include/header.php');
 include_once('../include/sidebar.php');
 include_once('../include/top-nav.php');
+// echo $_SESSION['user_id'];
 
 $sql_company_profile = "SELECT * FROM companies WHERE cus_id={$_SESSION['user_id']}";
 $res_company_profile = mysqli_query($con, $sql_company_profile);
@@ -46,49 +47,57 @@ if ($result->num_rows > 0) {
 ?>
 
 <!-- Your HTML content for displaying company profile -->
-<div class="container mt-4">
-    <div class="row">
+<div class="container mt-5">
+    <div class="row g-4">
+        <!-- Company Details -->
         <div class="col-md-6">
-            <h2>Company Details</h2>
-            <p>Company Name: <?php echo $companyName; ?></p>
-            <p>Phone: <?php echo $companyPhone; ?></p>
-            <p>Email: <?php echo $companyEmail; ?></p>
-            <p>Address: <?php echo $companyAddress; ?></p>
-            <!-- Add more details as needed -->
-        </div>
-        <div class="col-md-6">
-            <h2>Company Logo</h2>
-            <div class="text-center" style="">
-                <?php echo '<img src="data:image/jpeg;base64,' . $base64 . '" alt="Profile Image" class="img-fluid img-thumbnail" style="width: 150px; height: 150px; border-radius: 50%;" />' ?>
-            </div>
-
-            <div class="container mt-4">
-                <button type="button" class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#modalUploadPhoto">
-                    Upload Photo
-                </button>
-            </div>
-            <div class="modal fade" id="modalUploadPhoto" tabindex="-1" role="dialog" aria-labelledby="modalUploadPhotoLabel" aria-hidden="true">
-                <div class="modal-dialog " role="document">
-                    <div class="modal-content card-bg">
-                        <div class="modal-header text-center">
-                            <h4 class="modal-title w-100 font-weight-bold">Edit Company Details</h4>
-                        </div>
-                        <form action="ajax-company.php" method="POST" enctype="multipart/form-data">
-                            <div class="modal-body">
-                                <div class="mt-3">
-                                    <label for="fileToUpload" class="form-label">Select image to upload:</label>
-                                    <input type="file" class="form-control" name="fileToUpload" id="fileToUpload">
-                                </div>
-                                <div class="my-3">
-                                    <button type="submit" class="btn btn-primary" id="img-upload" name="submit">Upload Image</button>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
+            <div class="card shadow">
+                <div class="card-body">
+                    <h2 class="card-title">Company Details</h2>
+                    <p><strong>Company Name:</strong> <?php echo $companyName; ?></p>
+                    <p><strong>Phone:</strong> <?php echo $companyPhone; ?></p>
+                    <p><strong>Email:</strong> <?php echo $companyEmail; ?></p>
+                    <p><strong>Address:</strong> <?php echo $companyAddress; ?></p>
                 </div>
             </div>
         </div>
+
+        <!-- Company Logo & Upload -->
+        <div class="col-md-6 d-flex flex-column align-items-center">
+            <h2>Company Logo</h2>
+            <div class="mb-3">
+                <img src="data:image/jpeg;base64,<?php echo $base64; ?>" alt="Company Logo" class="img-thumbnail rounded-circle" style="width: 150px; height: 150px;">
+            </div>
+            <button type="button" class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalUploadPhoto">
+                Upload Photo
+            </button>
+        </div>
     </div>
+
+    <!-- Modal for Uploading Photo -->
+    <div class="modal fade" id="modalUploadPhoto" tabindex="-1" aria-labelledby="modalUploadPhotoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content card-bg">
+                <div class="modal-header">
+                    <h5 class="modal-title text-light" id="modalUploadPhotoLabel">Edit Company Details</h5>
+                    <button type="button" class="btn-close btn-primary" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form action="ajax-company.php" method="POST" enctype="multipart/form-data">
+                    <div class="modal-body">
+                        <div class="mb-3">
+                            <label for="fileToUpload" class="form-label text-light">Select image to upload:</label>
+                            <input type="file" class="form-control" name="fileToUpload" id="fileToUpload">
+                        </div>
+                        <div class="text-center my-4">
+                            <button type="submit" class="btn btn-primary" name="submit">Upload Image</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 
     <!-- Button to open Edit Company modal -->
     <div class="container mt-4">
@@ -102,9 +111,9 @@ if ($result->num_rows > 0) {
         <div class="modal-dialog" role="document">
             <div class="modal-content card-bg">
                 <div class="modal-header text-center">
-                    <h4 class="modal-title w-100 font-weight-bold">Edit Company Details</h4>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
+                    <h4 class="modal-title w-100 text-light font-weight-bold">Edit Company Details</h4>
+                    <button type="button" class="btn-light btn-close" data-bs-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true"></span>
                     </button>
                 </div>
                 <div class="modal-body mx-3">
@@ -115,23 +124,23 @@ if ($result->num_rows > 0) {
                         <input type="file" class="form-control" id="companyLogo" name="company-logo" value="<?php echo $companyLogo; ?>" required>
                     </div> -->
                         <div class="mb-3">
-                            <label for="companyName" class="form-label font-weight-semibold">Company Name:</label>
+                            <label for="companyName" class="form-label text-light font-weight-semibold">Company Name:</label>
                             <input type="text" class="form-control" id="companyName" name="company-name" value="<?php echo $companyName; ?>" required>
                         </div>
                         <div class="mb-3">
-                            <label for="companyPhone" class="form-label font-weight-semibold">Company Phone:</label>
+                            <label for="companyPhone" class="form-label text-light font-weight-semibold">Company Phone:</label>
                             <input type="tel" class="form-control" id="companyPhone" name="company-phone" value="<?php echo $companyPhone; ?>" required>
                         </div>
                         <div class="mb-3">
-                            <label for="companyEmail" class="form-label font-weight-semibold">Company email:</label>
+                            <label for="companyEmail" class="form-label text-light font-weight-semibold">Company email:</label>
                             <input type="email" class="form-control" id="companyEmail" name="company-email" value="<?php echo $companyEmail; ?>" required>
                         </div>
                         <div class="mb-3">
-                            <label for="companyAddress" class="form-label font-weight-semibold">Company address:</label>
+                            <label for="companyAddress" class="form-label text-light font-weight-semibold">Company address:</label>
                             <input type="text" class="form-control" id="companyAddress" name="company-address" value="<?php echo $companyAddress; ?>" required>
                         </div>
                         <div class="mb-3">
-                            <label for="companyGST" class="form-label font-weight-semibold">Company GST No.:</label>
+                            <label for="companyGST" class="form-label text-light font-weight-semibold">Company GST No.:</label>
                             <input type="text" class="form-control" id="companyGST" name="company-gst" value="<?php echo $companyGST; ?>" required>
                         </div>
                         <!-- Add more fields as needed -->

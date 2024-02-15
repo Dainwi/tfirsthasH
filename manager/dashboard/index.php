@@ -52,7 +52,7 @@ if ($paymentType == 0) {
 $firstDayOfMonth = date('Y-m-01'); // First day of the current month
 $lastDayOfMonth = date('Y-m-t'); // Last day of the current month
 
-$sql4 = "SELECT COUNT(*) as project_count FROM projects_db WHERE cus_id = '$cusID' AND project_sdate BETWEEN '$firstDayOfMonth' AND '$lastDayOfMonth'";
+$sql4 = "SELECT COUNT(*) as project_count FROM assign_manager_db LEFT JOIN projects_db ON assign_manager_db.am_project_id = projects_db.project_id WHERE cus_id = '$cusID' AND am_user_id = '$manID' AND project_sdate BETWEEN '$firstDayOfMonth' AND '$lastDayOfMonth'";
 $result = mysqli_query($con, $sql4);
 if ($result) {
     $row = mysqli_fetch_assoc($result);

@@ -1463,6 +1463,12 @@ if (isset($_GET['prid'])) {
                         var evntdate = $(this).closest('td').find('input[name="evntdate"]').val();
                         var emptype = $(this).closest('td').find('input[name="emptype"]').val();
                         var classnm = ".cdiv" + rid;
+                        
+                        console.log("Event Date: "+evntdate);
+                        console.log("rid: "+rid);
+                        console.log("Event id: "+evntid);
+                        console.log("Employee type: "+emptype);
+                        console.log("Class name: "+classnm);
 
                         $("#name-classs").val(classnm);
 

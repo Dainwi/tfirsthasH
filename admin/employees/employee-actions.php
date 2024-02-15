@@ -2,10 +2,16 @@
 include_once('../../config.php');
 session_start();
 
-ini_set('display_errors', 1);
-error_reporting(E_ALL);
+// ini_set('display_errors', 1);
+// error_reporting(E_ALL);
 
 $cusID = $_SESSION['user_id'];
+
+require '../../phpmailer/src/PHPMailer.php';
+require '../../phpmailer/src/Exception.php';
+require '../../phpmailer/src/SMTP.php';
+
+
 
 //employee type add
 if (isset($_POST['type-submit'])) {
@@ -63,6 +69,7 @@ if (isset($_POST['save-member'])) {
     $phone = mysqli_real_escape_string($con, $_POST['phone']);
     $payment_type = mysqli_real_escape_string($con, $_POST['payment_type']);
     $employee_type = mysqli_real_escape_string($con, $_POST['employee_type']);
+    $default_password = md5(substr($name, 0, 4) . substr($phone, -4));
 
     if (isset($_POST['position'])) {
         $position = $_POST['position'];
@@ -74,9 +81,66 @@ if (isset($_POST['save-member'])) {
         $_SESSION['user_exist'] = "email already exist";
         echo "<script>window.location=document.referrer;</script>";
     } else {
-        $sql1 = "INSERT INTO users_db(user_name, user_email, user_phone, user_role, payment_option, cus_id) VALUES('$name', '$email', '$phone', '$employee_type', '$payment_type', '$cusID')";
+        $sql1 = "INSERT INTO users_db(user_name, user_email, user_password, user_phone, user_role, payment_option, cus_id) VALUES('$name', '$email', '$default_password','$phone', '$employee_type', '$payment_type', '$cusID')";
         $result1 = mysqli_query($con, $sql1);
         if ($result1) {
+            
+            $mail = new PHPMailer\PHPMailer\PHPMailer();
+            try {
+                // SMTP configuration
+                $mail->isSMTP();
+                $mail->Host = 'smtp.gmail.com';
+                $mail->SMTPAuth = true;
+                $mail->Username = 'firsthash.business@gmail.com';
+                $mail->Password = 'qoklbmdtlyqesvqr';
+                $mail->SMTPSecure = PHPMailer\PHPMailer\PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port = 587;
+                
+                $mail->setFrom('firsthash.business@gmail.com', 'First Hash');
+                $mail->addAddress($email);
+              $mail->isHTML(true);
+$mail->Subject = 'Welcome to First Hash!';
+
+// Example for extracting first 4 letters of name and last 4 digits of phone
+// $name = 'Danwichoudhary'; // Example name
+//$phone = '9876543239'; // Example phone number
+
+$password = substr($name, 0, 4) . substr($phone, -4);
+
+// HTML email template
+$mail->Body = '
+    <html>
+    <head>
+        <title>Welcome to First Hash!</title>
+    </head>
+    <body style="font-family: Arial, sans-serif;">
+        <h2>Welcome to First Hash!</h2>
+        <p>Dear ' . $name . ',</p>
+        <p>We\'re thrilled to welcome you aboard! It\'s a pleasure to have you as a new member of our community.</p>
+        <p>Below are your login details:</p>
+        <ul>
+            <li><strong>Email:</strong> ' . $email . '</li>
+            <li><strong>Password:</strong> Your password is comprised of the first four letters of your name followed by the last four digits of your phone number.</li>
+            <li>For example, if your name is ' . $name . ' and your phone number is ' . $phone . ', your password would be ' . $password . '.</li>
+        </ul>
+        <p>We recommend changing your password after your initial login for added security.</p>
+        <p>If you have any questions or require assistance, don\'t hesitate to reach out to our support team.</p>
+        <p>We hope you thoroughly enjoy your experience on First Hash!</p>
+        <p>Warm regards,<br>Team First Hash</p>
+        <br>
+        <p>contact for support: support@firsthash.in</p>
+    </body>
+    </html>';
+                
+                
+                $mail->send();
+                echo 'Reset link has been sent to your email.' . $email ;
+            } catch (Exception $e) {
+                echo "Message could not be sent. Mailer Error: " . $mail->ErrorInfo;
+            }
+            
+            
+            
             $last_id = mysqli_insert_id($con);
             if ($employee_type == 2) {
                 foreach ($position as $type) {
@@ -85,6 +149,11 @@ if (isset($_POST['save-member'])) {
                 }
                 if ($ress) {
                     $_SESSION['created'] = "user created successfully";
+                    
+                    
+                    
+
+
                     header("Location: {$url}/admin/employees/");
                 } else {
                     $_SESSION['user_exist'] = "Something Went Wrong";

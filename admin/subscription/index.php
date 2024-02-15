@@ -27,7 +27,7 @@ $currentDate = time();
 
 $daysLeft = floor(($expiryDate - $currentDate) / (60 * 60 * 24));
 
-$daysThreshold = 510;
+$daysThreshold = 10;
 
 if ($daysLeft <= $daysThreshold) {
     $renewalRequired = true;
@@ -273,7 +273,7 @@ $result3 = mysqli_query($con, $sql3);
                             // ... Other data ...
                         },
                         success: function(response) {
-                            // window.location.href = "index.php";
+                            window.location.reload();
                             console.log("Payment success");
                         },
                         error: function(xhr, status, error) {
@@ -300,36 +300,22 @@ $result3 = mysqli_query($con, $sql3);
 <!-- for upgrade plan -->
 <script>
     $(document).ready(function() {
-        // When the Upgrade Now button is clicked
         $('#upgradePlan').click(function() {
-            // Get the value of the selected radio input
             var selectedPlanId = $('input[name="membershipPlan"]:checked').val();
             var planPriceC = $('input[name="membershipPlan"]:checked').data('price-c');
             var planName = $('input[name="membershipPlan"]:checked').data('plan-name');
             var planDuration = $('input[name="membershipPlan"]:checked').data('plan-d');
 
-            // Log the selected plan ID to the console (you can perform further actions here)
-            console.log(selectedPlanId);
-          
-
-            // Pass the PHP variables to JavaScript
             var planId = selectedPlanId;
-            var planDuration = planDuration;
             var userId = '<?php echo $userId; ?>';
-
-            var payableAmount = planPriceC; // Use the JavaScript variable instead of PHP variable
-            console.log(planId);
-
+            var payableAmount = planPriceC;
 
             var options = {
-                key: '<?php echo $rkey ?>', // Replace with your actual key
-                amount: payableAmount * 100, // Amount in paise
+                key: '<?php echo $rkey ?>',
+                amount: payableAmount * 100, // Assuming payableAmount is in the correct currency unit that Razorpay expects
                 currency: 'INR',
                 name: '<?php echo $rname ?>',
                 handler: function(response) {
-                    // ... Other variables ...
-
-                    // You can use the variables here in your AJAX request
                     $.ajax({
                         type: "POST",
                         url: "payment.php",
@@ -340,21 +326,25 @@ $result3 = mysqli_query($con, $sql3);
                             planId: planId,
                             planDuration: planDuration,
                             userId: userId,
-                            // ... Other data ...
                         },
                         success: function(response) {
-                            
-                        //  window.location.href = "index.php";
-                            console.log("Payment success");
+                            // Assuming the response is a success indicator (you might need to adjust based on actual response structure)
+                            // if (response === 'success') { // Check if the response indicates success
+                                // alert("Upgrade successful!");
+                                
+                                window.location.reload();
+                                // Reload the page
+                            // } else {
+                            //     // Handle failure case, maybe show a message to the user
+                            //     console.error("Upgrade failed:", response);
+                            // }
                         },
                         error: function(xhr, status, error) {
-                            console.error(
-                                "AJAX request to payment-process.php failed:",
-                                error);
+                            console.error("AJAX request to payment.php failed:", error);
                         }
                     });
                 },
-                // ... Rest of your Razorpay options ...
+                // Other Razorpay options...
             };
 
             var rzp = new Razorpay(options);
@@ -362,6 +352,7 @@ $result3 = mysqli_query($con, $sql3);
         });
     });
 </script>
+
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 
 <?php
