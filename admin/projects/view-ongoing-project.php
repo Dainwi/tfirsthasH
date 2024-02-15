@@ -1487,9 +1487,6 @@ if (isset($_GET['prid'])) {
                             },
                             success: function(response) {
                                 $("#modal-ae").html(response);
-
-
-
                             }
                         });
 

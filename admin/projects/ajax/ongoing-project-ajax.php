@@ -3,7 +3,7 @@ include_once('../../../config.php');
 
 session_start();
 
-$cusID=$_SESSION['user_id'];
+$cusID = $_SESSION['user_id'];
 
 if (isset($_POST['assignM'])) {
     $projectId = $_POST['prid'];
@@ -235,96 +235,12 @@ if (isset($_POST['gatheringc'])) {
 }
 
 
-//assign requirements
-// if (isset($_POST['assignreq'])) {
-//     $rid = $_POST['rid'];
-//     $evntid = $_POST['evntid'];
-//     $evntdate = $_POST['evntdate'];
-//     $emptype = $_POST['emptype'];
-
-//     $date = date($evntdate);
-//     $response = "";
-//     $sql = "SELECT * FROM employee_position LEFT JOIN users_db ON employee_position.ep_user_id=users_db.u_id WHERE ep_type={$emptype} AND users_db.user_active=1  AND cus_id={$cusID}";
-//     $res = mysqli_query($con, $sql);
-
-//     if (mysqli_num_rows($res) > 0) {
-//         $response .= "<input type='hidden' name='erid' value='{$rid}'> <input type='hidden' name='eventid' value='{$evntid}'><input type='hidden' name='evntdate' value='{$evntdate}'>";
-//         while ($row = mysqli_fetch_assoc($res)) {
-//             $userid = $row['u_id'];
-//             $username = $row['user_name'];
-//             $uname = $row['user_username'];
-//             $sql1 = "SELECT * FROM assign_requirements WHERE ar_date='$date' AND ar_assign_to={$userid} AND ar_requirement_id={$rid} AND ar_event_id={$evntid}";
-//             $res1 = mysqli_query($con, $sql1);
-//             if (mysqli_num_rows($res1) > 0) {
-//                 $result_array = array();
-//                 $sql_type2 = "SELECT users_db.u_id,employee_position.*,employee_type.* FROM users_db INNER JOIN employee_position ON users_db.u_id = employee_position.ep_user_id INNER JOIN employee_type ON employee_position.ep_type = employee_type.type_id WHERE users_db.u_id={$userid}";
-//                 $res_type2 = mysqli_query($con, $sql_type2);
-
-//                 if ($res_type2) {
-
-//                     while ($r_type2 = mysqli_fetch_array($res_type2)) {
-//                         $rolee = $r_type2['type_name'];
-
-//                         array_push($result_array, $rolee);
-//                         // echo "<small class='font-size-8 text-light'>" . $r_type2['type_name'] . ", " . "</small>";
-//                     }
-//                     $List = implode(', ', $result_array);
-//                 }
-//                 $response .= "<div class='form-check mb-3'><input class='form-check-input border border-light' name='assignto[]' checked type='checkbox' value='{$userid}' id='checkr{$userid}'>
-//                                         <label class='form-check-label text-light' for='checkr{$userid}'>
-//                                           {$username} <small>({$List})</small>
-//                                         </label>
-//                                       </div>";
-//             } else {
-//                 // $response .= "<div class='form-check mb-3'><input class='form-check-input border border-light' name='assignto[]' type='checkbox' value='{$userid}' id='checkr{$userid}'>
-//                 //                         <label class='form-check-label text-light' for='checkr{$userid}'>
-//                 //                           {$username} <small>({$uname})</small>
-//                 //                         </label>
-//                 //                       </div>";
-
-//                 $sql2 = "SELECT * FROM assign_requirements WHERE ar_date ='$date' AND ar_assign_to={$userid}";
-//                 $res2 = mysqli_query($con, $sql2);
-//                 if (mysqli_num_rows($res2) > 0) {
-//                 } else {
-//                     $result_array = array();
-//                     $sql_type2 = "SELECT users_db.u_id,employee_position.*,employee_type.* FROM users_db INNER JOIN employee_position ON users_db.u_id = employee_position.ep_user_id INNER JOIN employee_type ON employee_position.ep_type = employee_type.type_id WHERE users_db.u_id={$userid}";
-//                     $res_type2 = mysqli_query($con, $sql_type2);
-
-//                     if ($res_type2) {
-
-//                         while ($r_type2 = mysqli_fetch_array($res_type2)) {
-//                             $rolee = $r_type2['type_name'];
-
-//                             array_push($result_array, $rolee);
-//                             // echo "<small class='font-size-8 text-light'>" . $r_type2['type_name'] . ", " . "</small>";
-//                         }
-//                         $List = implode(', ', $result_array);
-//                     }
-//                     $response .= "<div class='form-check mb-3'><input class='form-check-input border border-light' name='assignto[]' type='checkbox' value='{$userid}' id='checkr{$userid}'>
-//                                         <label class='form-check-label text-light' for='checkr{$userid}'>
-//                                           {$username} <small>({$List})</small>
-//                                         </label>
-//                                       </div>";
-//                 }
-//             }
-//         }
-//     } else {
-//         $response .= "No employee found";
-//     }
-
-//     echo $response;
-// }
-
-
-
-
-
 if (isset($_POST['assignreq'])) {
     $rid = mysqli_real_escape_string($con, $_POST['rid']);
     $evntid = mysqli_real_escape_string($con, $_POST['evntid']);
     $evntdate = mysqli_real_escape_string($con, $_POST['evntdate']);
     $emptype = mysqli_real_escape_string($con, $_POST['emptype']);
-    
+
 
     $date = date('Y-m-d', strtotime($evntdate)); // Format the date correctly
     $response = "";
@@ -345,7 +261,7 @@ if (isset($_POST['assignreq'])) {
         while ($row = mysqli_fetch_assoc($res)) {
             $userid = $row['u_id'];
             $username = $row['user_name'];
-            $userType = $row['type_name']; // Assuming type_name is the employee type
+            $userType = $row['type_name']; 
 
             $sql1 = "SELECT * FROM assign_requirements 
                      WHERE ar_date = '{$date}' AND ar_assign_to = '{$userid}' 
@@ -377,9 +293,14 @@ if (isset($_POST['assignreq'])) {
 
 
 if (isset($_POST['req-submit'])) {
+<<<<<<< HEAD
     // echo "<pre>";
     // echo print_r($_POST);
    
+=======
+
+    $output = "";
+>>>>>>> 0bc2f4e7309b15a34eabe24c1fd3ede777cd57c6
     if (isset($_POST['erid'])) {
 
         $output = "";
@@ -392,9 +313,14 @@ if (isset($_POST['req-submit'])) {
         // echo $evntdate;
 
 
+<<<<<<< HEAD
        $datee = date_create($evntdate);
 $formattedDate = $datee->format('Y-m-d'); // Format the date as YYYY-MM-DD
 
+=======
+        $datee = date_create($evntdate);
+        $formattedDate = $datee->format('Y-m-d');
+>>>>>>> 0bc2f4e7309b15a34eabe24c1fd3ede777cd57c6
 
 
         $sql = "DELETE FROM assign_requirements WHERE ar_requirement_id={$erid}";
@@ -410,9 +336,16 @@ $formattedDate = $datee->format('Y-m-d'); // Format the date as YYYY-MM-DD
             $evntdateSafe = mysqli_real_escape_string($con, $evntdate);
             $pridSafe = mysqli_real_escape_string($con, $prid);
 
+<<<<<<< HEAD
            $sql1 = "INSERT INTO assign_requirements(ar_requirement_id,ar_event_id,ar_date,ar_assign_to,ar_project_id)VALUES($erid,$eventid,'$formattedDate',$assigntos,$prid)";
             $res1 = mysqli_query($con, $sql1);
         }
+=======
+                    // $sql1 = "INSERT INTO assign_requirements(ar_requirement_id,ar_event_id,ar_date,ar_assign_to,ar_project_id)VALUES($erid,$eventid,'$evntdate',$assigntos,$prid)";
+                    $sql1 = "INSERT INTO assign_requirements(ar_requirement_id,ar_event_id,ar_date,ar_assign_to,ar_project_id)VALUES($erid,$eventid,'$formattedDate',$assigntos,$prid)";
+                    $res1 = mysqli_query($con, $sql1);
+                }
+>>>>>>> 0bc2f4e7309b15a34eabe24c1fd3ede777cd57c6
 
         if ($res1) {
             $sql3 = "SELECT * FROM assign_requirements LEFT JOIN users_db ON users_db.u_id = assign_requirements.ar_assign_to WHERE ar_requirement_id=$eridSafe AND users_db.user_active=1";
